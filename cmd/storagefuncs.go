@@ -224,8 +224,10 @@ func cmdExportStorage(fl Flags) (int, error) {
 				return caddy.ExitCodeFailedQuit, err
 			}
 
+			// archive entries always use forward slashes, but
+			// file system storage lists keys with OS separators
 			hdr := &tar.Header{
-				Name:    k,
+				Name:    filepath.ToSlash(k),
 				Mode:    0o600,
 				Size:    int64(len(v)),
 				ModTime: info.Modified,
